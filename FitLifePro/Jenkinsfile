@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Build Backend') {
+            agent {
+                docker { 
+                    image 'maven:3.9.6-eclipse-temurin-17' 
+                    args '-v /root/.m2:/root/.m2'
+                }
+            }
+            steps {
+                dir('server-java') {
+                    sh 'mvn clean package -DskipTests'
+                }
+            }
+        }
+        
+        stage('Build Frontend') {
+            agent {
+                docker { 
+                    image 'node:18-alpine' 
+                }
+            }
+            steps {
+                dir('client') {
+                    sh 'npm ci'
+                    sh 'npm run build'
+                }
+            }
+        }
+        
+        stage('Docker Build') {
+            steps {
+                script {
+                    // This requires Docker to be available on the Jenkins agent
+                    sh 'docker-compose build'
+                }
+            }
+        }
+    }
+}
