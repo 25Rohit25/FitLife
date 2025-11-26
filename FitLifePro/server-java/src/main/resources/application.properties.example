@@ -2,11 +2,11 @@ spring.data.mongodb.uri=mongodb://localhost:27017/fitlifepro
 server.port=5000
 
 # JWT Configuration
-jwt.secret=fitlifepro_super_secure_secret_key_for_jwt_authentication_which_is_very_long_and_secure_enough_for_hs512_algorithm_checks_to_pass_successfully
+jwt.secret=${JWT_SECRET}
 jwt.expiration=86400000
 
 # Gemini API
-gemini.api.key=AIzaSyCqO-7KO9tPws3HP3Gy6xAtwRf_VccPYr4
+gemini.api.key=${GEMINI_API_KEY}
 gemini.api.url=https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent
 
 # Logging

@@ -53,3 +53,6 @@ Desktop.ini
 
 # Docker
 docker-compose.override.yml
+
+# Secrets
+server-java/src/main/resources/application.properties
