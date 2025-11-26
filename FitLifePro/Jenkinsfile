@@ -3,29 +3,18 @@ pipeline {
     
     stages {
         stage('Build Backend') {
-            agent {
-                docker { 
-                    image 'maven:3.9.6-eclipse-temurin-17' 
-                    args '-v /root/.m2:/root/.m2'
-                }
-            }
             steps {
                 dir('FitLifePro/server-java') {
-                    sh 'mvn clean package -DskipTests'
+                    bat 'mvn clean package -DskipTests'
                 }
             }
         }
         
         stage('Build Frontend') {
-            agent {
-                docker { 
-                    image 'node:18-alpine' 
-                }
-            }
             steps {
                 dir('FitLifePro/client') {
-                    sh 'npm ci'
-                    sh 'npm run build'
+                    bat 'npm ci'
+                    bat 'npm run build'
                 }
             }
         }
@@ -33,13 +22,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 dir('FitLifePro') {
-                    script {
-                        if (isUnix()) {
-                            sh 'docker-compose build'
-                        } else {
-                            bat 'docker-compose build'
-                        }
-                    }
+                    bat 'docker-compose build'
                 }
             }
         }
