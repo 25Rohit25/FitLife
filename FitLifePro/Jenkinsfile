@@ -10,7 +10,7 @@ pipeline {
                 }
             }
             steps {
-                dir('server-java') {
+                dir('FitLifePro/server-java') {
                     sh 'mvn clean package -DskipTests'
                 }
             }
@@ -23,7 +23,7 @@ pipeline {
                 }
             }
             steps {
-                dir('client') {
+                dir('FitLifePro/client') {
                     sh 'npm ci'
                     sh 'npm run build'
                 }
@@ -32,9 +32,14 @@ pipeline {
         
         stage('Docker Build') {
             steps {
-                script {
-                    // This requires Docker to be available on the Jenkins agent
-                    sh 'docker-compose build'
+                dir('FitLifePro') {
+                    script {
+                        if (isUnix()) {
+                            sh 'docker-compose build'
+                        } else {
+                            bat 'docker-compose build'
+                        }
+                    }
                 }
             }
         }
