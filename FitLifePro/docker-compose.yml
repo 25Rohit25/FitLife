@@ -1,13 +1,16 @@
 version: '3.8'
 
 services:
-  mongodb:
-    image: mongo:latest
-    container_name: fitlifepro-mongo
+  mysql:
+    image: mysql:8.0
+    container_name: fitlifepro-mysql
     ports:
-      - "27017:27017"
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: fitlifepro
     volumes:
-      - mongo-data:/data/db
+      - mysql-data:/var/lib/mysql
 
   backend:
     build: ./server-java
@@ -15,18 +18,21 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/fitlifepro
-      - GEMINI_API_KEY=AIzaSyCqO-7KO9tPws3HP3Gy6xAtwRf_VccPYr4
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
     depends_on:
-      - mongodb
+      - mysql
 
   frontend:
     build: ./client
     container_name: fitlifepro-frontend
     ports:
-      - "5173:80"
+      - "80:80"
     depends_on:
       - backend
 
 volumes:
-  mongo-data:
+  mysql-data:

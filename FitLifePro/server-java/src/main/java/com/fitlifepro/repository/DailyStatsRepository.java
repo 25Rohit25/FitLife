@@ -1,9 +1,9 @@
 package com.fitlifepro.repository;
 
 import com.fitlifepro.model.DailyStats;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
-public interface DailyStatsRepository extends MongoRepository<DailyStats, String> {
-    Optional<DailyStats> findByUserIdAndDate(String userId, String date);
+public interface DailyStatsRepository extends JpaRepository<DailyStats, Long> {
+    Optional<DailyStats> findByUserIdAndDate(Long userId, String date);
 }

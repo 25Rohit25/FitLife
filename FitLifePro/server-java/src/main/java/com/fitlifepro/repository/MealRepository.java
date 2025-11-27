@@ -1,9 +1,9 @@
 package com.fitlifepro.repository;
 
 import com.fitlifepro.model.Meal;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
-public interface MealRepository extends MongoRepository<Meal, String> {
-    List<Meal> findByUserIdOrderByDateDesc(String userId);
+public interface MealRepository extends JpaRepository<Meal, Long> {
+    List<Meal> findByUserIdOrderByDateDesc(Long userId);
 }

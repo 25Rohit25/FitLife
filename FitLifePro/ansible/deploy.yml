@@ -1,0 +1,24 @@
+---
+- name: Deploy FitLife Pro to Kubernetes
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Apply MySQL Secret
+      kubernetes.core.k8s:
+        state: present
+        src: ../k8s/mysql-secret.yaml
+
+    - name: Apply MySQL Deployment
+      kubernetes.core.k8s:
+        state: present
+        src: ../k8s/mysql-deployment.yaml
+
+    - name: Apply Backend Deployment
+      kubernetes.core.k8s:
+        state: present
+        src: ../k8s/backend-deployment.yaml
+
+    - name: Apply Frontend Deployment
+      kubernetes.core.k8s:
+        state: present
+        src: ../k8s/frontend-deployment.yaml

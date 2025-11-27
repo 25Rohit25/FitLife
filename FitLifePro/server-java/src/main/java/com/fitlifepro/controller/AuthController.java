@@ -41,44 +41,46 @@ public class AuthController {
         user.setName(signUpRequest.getName());
         user.setEmail(signUpRequest.getEmail());
         user.setPassword(encoder.encode(signUpRequest.getPassword()));
+        user.getRoles().add("ROLE_USER");
 
         User savedUser = userRepository.save(user);
 
         // Auto login after register
-        String jwt = jwtUtils.generateJwtToken(savedUser.getId());
+        String jwt = jwtUtils.generateJwtToken(savedUser.getId().toString());
         return ResponseEntity.ok(new JwtResponse(jwt));
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
-        // We need to find the user first to get the ID, because our UserDetailsService expects ID
+        // We need to find the user first to get the ID, because our UserDetailsService
+        // expects ID
         // But standard AuthManager expects username.
         // Let's adjust UserDetailsService to find by email if it's an email?
         // Actually, the simplest way to match the Node app logic (which finds by email)
         // is to manually check password here or implement a custom AuthProvider.
         // But let's try to stick to Spring Security.
-        
+
         // Hack: We find the user by email, get their ID, then authenticate with ID.
         User user = userRepository.findByEmail(loginRequest.getEmail())
                 .orElse(null);
-        
+
         if (user == null) {
-             return ResponseEntity.badRequest().body("Invalid Credentials");
+            return ResponseEntity.badRequest().body("Invalid Credentials");
         }
 
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getId(), loginRequest.getPassword()));
+                new UsernamePasswordAuthenticationToken(user.getId().toString(), loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         return ResponseEntity.ok(new JwtResponse(jwt));
     }
-    
+
     @GetMapping("/user")
     public ResponseEntity<?> getUser(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user = userRepository.findById(userDetails.getUsername()).orElse(null);
+        User user = userRepository.findById(Long.parseLong(userDetails.getUsername())).orElse(null);
         return ResponseEntity.ok(user);
     }
 }

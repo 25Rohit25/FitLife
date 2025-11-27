@@ -1,15 +1,18 @@
 package com.fitlifepro.model;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.persistence.*;
 
 @Data
-@Document(collection = "daily_stats")
+@Entity
+@Table(name = "daily_stats")
 public class DailyStats {
     @Id
-    private String id;
-    private String userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private Long userId;
+
     private String date; // YYYY-MM-DD
     private Integer steps = 0;
     private Integer caloriesBurned = 0;

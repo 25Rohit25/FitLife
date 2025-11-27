@@ -1,17 +1,20 @@
 package com.fitlifepro.model;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.persistence.*;
 
 import java.util.Date;
 
 @Data
-@Document(collection = "meals")
+@Entity
+@Table(name = "meals")
 public class Meal {
     @Id
-    private String id;
-    private String userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private Long userId;
+
     private String type;
     private String description;
     private Integer calories;

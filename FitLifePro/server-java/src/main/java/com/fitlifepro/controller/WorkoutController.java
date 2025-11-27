@@ -19,29 +19,29 @@ import java.util.Map;
 public class WorkoutController {
     @Autowired
     WorkoutRepository workoutRepository;
-    
+
     @Autowired
     UserRepository userRepository;
 
     @GetMapping
     public List<Workout> getWorkouts(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return workoutRepository.findByUserIdOrderByDateDesc(userDetails.getUsername());
+        return workoutRepository.findByUserIdOrderByDateDesc(Long.parseLong(userDetails.getUsername()));
     }
 
     @PostMapping
     public ResponseEntity<?> addWorkout(@RequestBody Workout workout, Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String userId = userDetails.getUsername();
-        workout.setUserId(userId);
-        
+        workout.setUserId(Long.parseLong(userId));
+
         Workout savedWorkout = workoutRepository.save(workout);
-        
+
         // Gamification Logic (Simplified)
-        User user = userRepository.findById(userId).orElseThrow();
+        User user = userRepository.findById(Long.parseLong(userId)).orElseThrow();
         int xpGained = 10 * (workout.getDuration() / 10);
         user.getGamification().setXp(user.getGamification().getXp() + xpGained);
-        
+
         // Level up logic
         int currentLevel = user.getGamification().getLevel();
         int nextLevelXp = currentLevel * 100;
@@ -50,9 +50,9 @@ public class WorkoutController {
             user.getGamification().setLevel(currentLevel + 1);
             leveledUp = true;
         }
-        
+
         userRepository.save(user);
-        
+
         Map<String, Object> response = new HashMap<>();
         response.put("workout", savedWorkout);
         if (leveledUp) {
@@ -62,12 +62,12 @@ public class WorkoutController {
             gamification.put("xp", user.getGamification().getXp());
             response.put("gamification", gamification);
         }
-        
+
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteWorkout(@PathVariable String id) {
+    public ResponseEntity<?> deleteWorkout(@PathVariable Long id) {
         workoutRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }

@@ -19,18 +19,18 @@ public class MealController {
     @GetMapping
     public List<Meal> getMeals(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return mealRepository.findByUserIdOrderByDateDesc(userDetails.getUsername());
+        return mealRepository.findByUserIdOrderByDateDesc(Long.parseLong(userDetails.getUsername()));
     }
 
     @PostMapping
     public Meal addMeal(@RequestBody Meal meal, Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        meal.setUserId(userDetails.getUsername());
+        meal.setUserId(Long.parseLong(userDetails.getUsername()));
         return mealRepository.save(meal);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteMeal(@PathVariable String id) {
+    public ResponseEntity<?> deleteMeal(@PathVariable Long id) {
         mealRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }

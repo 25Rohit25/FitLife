@@ -17,7 +17,7 @@ public class UserController {
     @GetMapping("/profile")
     public ResponseEntity<?> getProfile(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user = userRepository.findById(userDetails.getUsername()).orElse(null);
+        User user = userRepository.findById(Long.parseLong(userDetails.getUsername())).orElse(null);
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
@@ -27,7 +27,7 @@ public class UserController {
     @PutMapping("/profile")
     public ResponseEntity<?> updateProfile(@RequestBody User updatedUser, Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user = userRepository.findById(userDetails.getUsername()).orElse(null);
+        User user = userRepository.findById(Long.parseLong(userDetails.getUsername())).orElse(null);
 
         if (user == null) {
             return ResponseEntity.notFound().build();
@@ -51,7 +51,7 @@ public class UserController {
     @GetMapping("/water")
     public ResponseEntity<?> getWaterIntake(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user = userRepository.findById(userDetails.getUsername()).orElse(null);
+        User user = userRepository.findById(Long.parseLong(userDetails.getUsername())).orElse(null);
         if (user == null)
             return ResponseEntity.notFound().build();
 
@@ -78,7 +78,7 @@ public class UserController {
     public ResponseEntity<?> updateWaterIntake(@RequestBody com.fitlifepro.dto.WaterRequest request,
             Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user = userRepository.findById(userDetails.getUsername()).orElse(null);
+        User user = userRepository.findById(Long.parseLong(userDetails.getUsername())).orElse(null);
         if (user == null)
             return ResponseEntity.notFound().build();
 

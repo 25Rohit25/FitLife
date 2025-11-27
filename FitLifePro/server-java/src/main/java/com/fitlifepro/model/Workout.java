@@ -1,17 +1,20 @@
 package com.fitlifepro.model;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.persistence.*;
 
 import java.util.Date;
 
 @Data
-@Document(collection = "workouts")
+@Entity
+@Table(name = "workouts")
 public class Workout {
     @Id
-    private String id;
-    private String userId; // Reference to User ID
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private Long userId; // Reference to User ID
+
     private String type;
     private Integer duration;
     private String intensity;

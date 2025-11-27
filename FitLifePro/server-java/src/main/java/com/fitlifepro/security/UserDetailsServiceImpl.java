@@ -19,18 +19,22 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
-        // In this app, we use ID as the subject in JWT usually, but let's stick to standard Spring Security
+        // In this app, we use ID as the subject in JWT usually, but let's stick to
+        // standard Spring Security
         // If the token subject is ID, we find by ID. If email, find by email.
         // The Node.js app likely put the user ID in the payload.
-        // Let's assume the subject is the User ID for consistency with typical MERN JWTs.
-        
-        User user = userRepository.findById(id)
+        // Let's assume the subject is the User ID for consistency with typical MERN
+        // JWTs.
+
+        User user = userRepository.findById(Long.parseLong(id))
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with id: " + id));
 
         return org.springframework.security.core.userdetails.User
-                .withUsername(user.getId()) // Use ID as username for internal security context
+                .withUsername(user.getId().toString()) // Use ID as username for internal security context
                 .password(user.getPassword())
-                .authorities(new ArrayList<>())
+                .authorities(user.getRoles().stream()
+                        .map(role -> new org.springframework.security.core.authority.SimpleGrantedAuthority(role))
+                        .collect(java.util.stream.Collectors.toList()))
                 .build();
     }
 }

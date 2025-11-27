@@ -21,10 +21,10 @@ public class StatsController {
         String userId = userDetails.getUsername();
         String today = LocalDate.now().toString();
 
-        return dailyStatsRepository.findByUserIdAndDate(userId, today)
+        return dailyStatsRepository.findByUserIdAndDate(Long.parseLong(userId), today)
                 .orElseGet(() -> {
                     DailyStats newStats = new DailyStats();
-                    newStats.setUserId(userId);
+                    newStats.setUserId(Long.parseLong(userId));
                     newStats.setDate(today);
                     return dailyStatsRepository.save(newStats);
                 });
@@ -36,10 +36,10 @@ public class StatsController {
         String userId = userDetails.getUsername();
         String today = LocalDate.now().toString();
 
-        DailyStats stats = dailyStatsRepository.findByUserIdAndDate(userId, today)
+        DailyStats stats = dailyStatsRepository.findByUserIdAndDate(Long.parseLong(userId), today)
                 .orElseGet(() -> {
                     DailyStats newStats = new DailyStats();
-                    newStats.setUserId(userId);
+                    newStats.setUserId(Long.parseLong(userId));
                     newStats.setDate(today);
                     return newStats;
                 });
@@ -47,7 +47,7 @@ public class StatsController {
         // Simulate syncing
         stats.setSteps(stats.getSteps() + (int) (Math.random() * 500));
         stats.setCaloriesBurned(stats.getCaloriesBurned() + (int) (Math.random() * 50));
-        
+
         return dailyStatsRepository.save(stats);
     }
 }
