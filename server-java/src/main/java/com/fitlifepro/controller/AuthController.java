@@ -21,7 +21,12 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     @GetMapping("/health")
     public ResponseEntity<?> healthCheck() {
-        return ResponseEntity.ok("Backend is running!");
+        try {
+            long count = userRepository.count();
+            return ResponseEntity.ok("Backend is running! DB Connection OK. User count: " + count);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Backend running, but DB Failed: " + e.getMessage());
+        }
     }
 
     @Autowired
