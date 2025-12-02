@@ -21,24 +21,7 @@ const Register = () => {
             navigate('/');
         } catch (err) {
             console.error(err);
-            console.error(err);
-            console.error(err);
-            let errorMessage = 'Registration failed';
-            let statusCode = 'N/A';
-
-            if (err.response) {
-                statusCode = `${err.response.status} ${err.response.statusText}`;
-                if (err.response.data) {
-                    errorMessage = typeof err.response.data === 'string' ? err.response.data : JSON.stringify(err.response.data);
-                } else {
-                    errorMessage = "Server returned empty response.";
-                }
-            } else if (err.request) {
-                errorMessage = 'No response from server. Check your internet connection or backend status.';
-            } else {
-                errorMessage = err.message;
-            }
-            alert(`Error: ${errorMessage}\nStatus: ${statusCode}\nAPI URL: ${axios.defaults.baseURL}`);
+            alert(err.response?.data || 'Registration failed');
         } finally {
             setLoading(false);
         }

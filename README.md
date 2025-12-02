@@ -92,6 +92,28 @@ http
 2.  **Access the app:**
     *   **Frontend**: [http://localhost:30000](http://localhost:30000)
 
+### 💻 Option 3: Local Development (Manual)
+Run the backend and frontend separately for development.
+
+1.  **Start Database (Docker):**
+    ```bash
+    docker-compose up -d mysql
+    ```
+
+2.  **Start Backend (Spring Boot):**
+    ```bash
+    cd server-java
+    mvn spring-boot:run
+    ```
+
+3.  **Start Frontend (React):**
+    ```bash
+    cd client
+    npm run dev
+    ```
+4.  **Access the app:**
+    *   **Frontend**: [http://localhost:5173](http://localhost:5173)
+
 ---
 
 ## 📂 Project Structure
