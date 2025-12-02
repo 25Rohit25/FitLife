@@ -38,7 +38,9 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterRequest signUpRequest) {
+        System.out.println("Register request received for email: " + signUpRequest.getEmail());
         if (userRepository.findByEmail(signUpRequest.getEmail()).isPresent()) {
+            System.out.println("Email already in use: " + signUpRequest.getEmail());
             return ResponseEntity.badRequest().body("Error: Email is already in use!");
         }
 
@@ -57,6 +59,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+        System.out.println("Login request received for email: " + loginRequest.getEmail());
         // We need to find the user first to get the ID, because our UserDetailsService
         // expects ID
         // But standard AuthManager expects username.
