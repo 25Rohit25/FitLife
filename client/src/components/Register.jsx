@@ -24,18 +24,21 @@ const Register = () => {
             console.error(err);
             console.error(err);
             let errorMessage = 'Registration failed';
+            let statusCode = 'N/A';
+
             if (err.response) {
-                // The request was made and the server responded with a status code
-                // that falls out of the range of 2xx
-                errorMessage = typeof err.response.data === 'string' ? err.response.data : JSON.stringify(err.response.data);
+                statusCode = `${err.response.status} ${err.response.statusText}`;
+                if (err.response.data) {
+                    errorMessage = typeof err.response.data === 'string' ? err.response.data : JSON.stringify(err.response.data);
+                } else {
+                    errorMessage = "Server returned empty response.";
+                }
             } else if (err.request) {
-                // The request was made but no response was received
                 errorMessage = 'No response from server. Check your internet connection or backend status.';
             } else {
-                // Something happened in setting up the request that triggered an Error
                 errorMessage = err.message;
             }
-            alert(`Error: ${errorMessage}\n\nAPI URL: ${axios.defaults.baseURL}`);
+            alert(`Error: ${errorMessage}\nStatus: ${statusCode}\nAPI URL: ${axios.defaults.baseURL}`);
         } finally {
             setLoading(false);
         }
