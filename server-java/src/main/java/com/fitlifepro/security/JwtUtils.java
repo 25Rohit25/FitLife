@@ -16,7 +16,7 @@ public class JwtUtils {
     @Value("${jwt.secret:defaultSecretKeyForDevelopmentOnly1234567890}")
     private String jwtSecret;
 
-    @Value("${jwt.expiration}")
+    @Value("${jwt.expiration:86400000}")
     private int jwtExpirationMs;
 
     private Key getSigningKey() {
