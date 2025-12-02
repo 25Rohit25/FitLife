@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/Card';
@@ -21,7 +22,20 @@ const Register = () => {
         } catch (err) {
             console.error(err);
             console.error(err);
-            alert(err.response?.data || 'Registration failed');
+            console.error(err);
+            let errorMessage = 'Registration failed';
+            if (err.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                errorMessage = typeof err.response.data === 'string' ? err.response.data : JSON.stringify(err.response.data);
+            } else if (err.request) {
+                // The request was made but no response was received
+                errorMessage = 'No response from server. Check your internet connection or backend status.';
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                errorMessage = err.message;
+            }
+            alert(`Error: ${errorMessage}\n\nAPI URL: ${axios.defaults.baseURL}`);
         } finally {
             setLoading(false);
         }

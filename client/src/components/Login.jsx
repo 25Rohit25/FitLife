@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/Card';
@@ -21,7 +22,16 @@ const Login = () => {
         } catch (err) {
             console.error(err);
             console.error(err);
-            alert(err.response?.data || 'Login failed');
+            console.error(err);
+            let errorMessage = 'Login failed';
+            if (err.response) {
+                errorMessage = typeof err.response.data === 'string' ? err.response.data : JSON.stringify(err.response.data);
+            } else if (err.request) {
+                errorMessage = 'No response from server. Check your internet connection or backend status.';
+            } else {
+                errorMessage = err.message;
+            }
+            alert(`Error: ${errorMessage}\n\nAPI URL: ${axios.defaults.baseURL}`);
         } finally {
             setLoading(false);
         }
