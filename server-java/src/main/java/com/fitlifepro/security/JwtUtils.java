@@ -13,7 +13,7 @@ import java.util.Date;
 @Component
 public class JwtUtils {
 
-    @Value("${jwt.secret}")
+    @Value("${jwt.secret:defaultSecretKeyForDevelopmentOnly1234567890}")
     private String jwtSecret;
 
     @Value("${jwt.expiration}")
@@ -33,7 +33,7 @@ public class JwtUtils {
                 .signWith(getSigningKey(), SignatureAlgorithm.HS512)
                 .compact();
     }
-    
+
     // Overload for manual generation if needed
     public String generateJwtToken(String userId) {
         return Jwts.builder()
