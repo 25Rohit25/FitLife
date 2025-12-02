@@ -19,6 +19,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+    @GetMapping("/health")
+    public ResponseEntity<?> healthCheck() {
+        return ResponseEntity.ok("Backend is running!");
+    }
+
     @Autowired
     AuthenticationManager authenticationManager;
 
