@@ -70,8 +70,8 @@ public class SecurityConfig {
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(false); // Must be false if allowedOrigins is "*"
-        config.addAllowedOrigin("*"); // Allow all origins for dev
+        config.setAllowCredentials(true);
+        config.addAllowedOriginPattern("*"); // Use Pattern to allow all with credentials
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
