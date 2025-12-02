@@ -43,23 +43,28 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterRequest signUpRequest) {
-        System.out.println("Register request received for email: " + signUpRequest.getEmail());
-        if (userRepository.findByEmail(signUpRequest.getEmail()).isPresent()) {
-            System.out.println("Email already in use: " + signUpRequest.getEmail());
-            return ResponseEntity.badRequest().body("Error: Email is already in use!");
+        try {
+            System.out.println("Register request received for email: " + signUpRequest.getEmail());
+            if (userRepository.findByEmail(signUpRequest.getEmail()).isPresent()) {
+                System.out.println("Email already in use: " + signUpRequest.getEmail());
+                return ResponseEntity.badRequest().body("Error: Email is already in use!");
+            }
+
+            User user = new User();
+            user.setName(signUpRequest.getName());
+            user.setEmail(signUpRequest.getEmail());
+            user.setPassword(encoder.encode(signUpRequest.getPassword()));
+            user.getRoles().add("ROLE_USER");
+
+            User savedUser = userRepository.save(user);
+
+            // Auto login after register
+            String jwt = jwtUtils.generateJwtToken(savedUser.getId().toString());
+            return ResponseEntity.ok(new JwtResponse(jwt));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Registration Error: " + e.getMessage());
         }
-
-        User user = new User();
-        user.setName(signUpRequest.getName());
-        user.setEmail(signUpRequest.getEmail());
-        user.setPassword(encoder.encode(signUpRequest.getPassword()));
-        user.getRoles().add("ROLE_USER");
-
-        User savedUser = userRepository.save(user);
-
-        // Auto login after register
-        String jwt = jwtUtils.generateJwtToken(savedUser.getId().toString());
-        return ResponseEntity.ok(new JwtResponse(jwt));
     }
 
     @PostMapping("/login")

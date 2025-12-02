@@ -57,7 +57,11 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/health").permitAll() // Just in case
+                        .requestMatchers("/api/health").permitAll()
+                        .requestMatchers("/error").permitAll() // Allow error responses to be seen
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll() // Allow
+                                                                                                         // preflight
+                                                                                                         // checks
                         .anyRequest().authenticated());
 
         http.authenticationProvider(authenticationProvider());
