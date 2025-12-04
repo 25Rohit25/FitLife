@@ -25,6 +25,30 @@ Built with a modern **React** frontend and a robust **Spring Boot** backend, it 
 
 ---
 
+## 🏗️ Architecture Flow
+
+```mermaid
+graph TD
+    User[👤 User] -->|Interacts| Client[💻 Frontend (React + Vite)]
+    Client -->|REST API Requests| Server[⚙️ Backend (Spring Boot)]
+    
+    subgraph Backend Services
+    Server -->|Auth & Data| DB[(🗄️ MySQL Database)]
+    Server -->|AI Coaching| AI[🧠 Google Gemini API]
+    end
+    
+    subgraph Infrastructure
+    Docker[🐳 Docker Containers]
+    K8s[☸️ Kubernetes Cluster]
+    end
+    
+    Client -.-> Docker
+    Server -.-> Docker
+    DB -.-> Docker
+```
+
+---
+
 ## 🛠️ Tech Stack
 
 ### Frontend
